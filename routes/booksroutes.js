@@ -82,7 +82,7 @@ try{
     res.status(500).json(err);
 }
 })
-router.patch('/:id',async (req,res)=>{
+router.delete('/:id',async (req,res)=>{
 try{
     const id = req.params.id;
     const response = await books.findByIdAndDelete(id);
