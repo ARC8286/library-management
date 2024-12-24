@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
 
 router.get('/', async (req, res) => {
     try {
-        const response = books.find();
+        const response = await books.find();
         res.status(200).json(response);
     } catch (err) {
         res.status(500).json(err);
@@ -26,7 +26,7 @@ router.get('/', async (req, res) => {
 router.get('/:bookgenre', async (req, res) => {
    try{ 
 
-    const bookgenre = req.params.bookgenre;
+    const bookGenre = req.params.bookgenre;
     if (bookGenre === "Fiction" ||
         bookGenre === "Non-Fiction" ||
         bookGenre === "Mystery" ||
@@ -53,7 +53,7 @@ router.get('/:bookgenre', async (req, res) => {
         bookGenre === "Religious" ||
         bookGenre === "Health & Fitness" ||
         bookGenre === "Political"){
-            const response = books.find({genre : bookgenre})
+            const response = await books.find({genre : bookGenre})
             res.status(200).json(response);
         }else{
             res.status(404).json(err,"user not found");
@@ -62,5 +62,40 @@ router.get('/:bookgenre', async (req, res) => {
             res.status(500).json(err);
         }
 })
+
+router.patch('/:id',async (req,res)=>{
+try{
+    const id = req.params.id;
+    const datatoupdate = req.body;
+    const response = books.findByIdAndUpdate(id,datatoupdate,{
+        new:true,
+        runValidators:true
+    }) 
+
+    if(!response){
+        res.status(404).json({message:"user not found"});
+    }else{
+
+        res.status(200).json(response)
+    }
+}catch(err){
+    res.status(500).json(err);
+}
+})
+router.patch('/:id',async (req,res)=>{
+try{
+    const id = req.params.id;
+    const response = books.findByIdAndDelete(id);
+    if(!response){
+        res.status(400).json({message:"user not found"});
+    }else{
+        res.status(200).json({message:"user deleted successfully"});
+    }
+    
+}catch(err){
+    res.status(500).json(err);
+}
+})
+
 
 module.exports =router;

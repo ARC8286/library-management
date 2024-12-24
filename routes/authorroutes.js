@@ -15,7 +15,7 @@ try{
 router.get('/',async(req,res)=>{
     try{
         const findauthor = await author.find();
-        res.status(200).json(response);
+        res.status(200).json(findauthor);
     }catch(err){
         res.status(200).json(err);
     }
